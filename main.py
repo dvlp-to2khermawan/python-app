@@ -1,5 +1,6 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from datetime import datetime
+import socket
 
 app = Flask(__name__)
 
@@ -23,6 +24,12 @@ def check_up():
         "message": "API is up and running!",
         "response_time_ms": round(response_time_ms, 2)  # Bulatkan ke 2 desimal
     })
+
+@app.route("/ip")
+def get_ip_addresses():
+    server_ip = socket.gethostbyname(socket.gethostname())
+    client_ip = request.remote_addr
+    return jsonify({"server_ip": server_ip, "client_ip": client_ip})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
